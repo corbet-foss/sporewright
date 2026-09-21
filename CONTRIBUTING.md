@@ -126,7 +126,7 @@ Previously distributed versions remain available under their original grants (se
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt) and [`CHANGELOG.md`](CHANGELOG.md)).
 
 To keep the project coherently stewarded, external contributors
-retain copyright in their work and grant the rights described in Corbet Labs'
+retain copyright in their work and grant the rights described in the
 organization-wide [Individual Contributor License Agreement](https://github.com/corbet-foss/.github/blob/cla-v1.0/CLA.md).
 
 Every external contribution must be submitted through a pull request whose

@@ -35,7 +35,7 @@ the pre-release most-specific-wins ownership model.
 
 ### Changed
 
-- Sporewright is stewarded by Corbet Labs under LGPL-3.0-only WITH
+- Sporewright is stewarded under LGPL-3.0-only WITH
   LGPL-3.0-linking-exception, and accepted contributions use the
   organization-wide Individual Contributor License Agreement while contributors
   retain copyright.
