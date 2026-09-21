@@ -1,0 +1,20 @@
+{
+  "name": "07_nonfinite_gates",
+  "description": "Any NON-FINITE value gates an option out of resolve — +inf, -inf, and NaN alike. Regression guard for the gate hardening: -inf must NOT anti-gate (it must not sort first on a w*(-inf) score) and NaN must NOT linger in the queue; both drop exactly like +inf. Only the finite-valued options remain, ordered ascending.",
+  "tensor": {
+    "levels": ["global", "device"],
+    "cells": [
+      { "level": "global", "inst": "", "option": "", "dim": "latency", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "alpha", "dim": "latency", "v": 0.1 },
+      { "level": "global", "inst": "", "option": "beta", "dim": "latency", "v": 0.2 },
+      { "level": "global", "inst": "", "option": "pos", "dim": "latency", "v": 0.05 },
+      { "level": "device", "inst": "A", "option": "pos", "dim": "reach", "v": "inf" },
+      { "level": "global", "inst": "", "option": "neg", "dim": "latency", "v": 0.03 },
+      { "level": "device", "inst": "A", "option": "neg", "dim": "reach", "v": "-inf" },
+      { "level": "global", "inst": "", "option": "nanopt", "dim": "latency", "v": 0.04 },
+      { "level": "device", "inst": "A", "option": "nanopt", "dim": "reach", "v": "nan" }
+    ]
+  },
+  "cursor": { "device": "A" },
+  "expected": ["alpha", "beta"]
+}

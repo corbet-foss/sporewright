@@ -1,0 +1,11 @@
+{
+  "name": "05_unknown_level_rejected",
+  "description": "A seed whose floor names a tier not in `levels` is unknown-level. instantiate must reject it with `unknown-level`, identically on both cores.",
+  "config": {
+    "levels": ["global", "source", "job"],
+    "seeds": [
+      { "floor": "nonexistent", "level": "global", "inst": "", "option": "groq", "dim": "financial", "kind": "value", "value": 0.0 }
+    ]
+  },
+  "expected_error": "unknown-level"
+}

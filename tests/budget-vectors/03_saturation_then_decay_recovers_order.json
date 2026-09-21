@@ -1,0 +1,38 @@
+{
+  "name": "03_saturation_then_decay_recovers_order",
+  "kind": "price",
+  "description": "A multi-window dynamic-regret sequence. α=0.05, cap 10 on hot_pool. Three over-cap windows (usage 30 each) lift λ_hot: 0.05·20=1.0 per window → 3.0. Then three idle windows (usage 0) decay it by 0.05·(0-10)=0.5 each → 3.0 → 2.5 → 2.0 → 1.5. cold_pool stays idle the whole run so λ_cold=0. With hot drawing 1 unit on hot_pool, hot scores 1.5 and cold scores 0 ⇒ cold still leads, but the constant (never-diminishing) step proves the price is dynamic: it rose under load and is decaying back as the quota refills. Captured live on both cores.",
+  "tensor": {
+    "levels": ["global"],
+    "cells": [
+      { "level": "global", "inst": "", "option": "", "dim": "financial", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "hot", "dim": "financial", "v": 0.0 },
+      { "level": "global", "inst": "", "option": "cold", "dim": "financial", "v": 0.0 },
+      { "level": "global", "inst": "", "option": "hot", "dim": "budget:hot_pool", "v": 1.0 },
+      { "level": "global", "inst": "", "option": "cold", "dim": "budget:cold_pool", "v": 1.0 }
+    ]
+  },
+  "budget": {
+    "step": 0.05,
+    "priceLevel": "global",
+    "pools": [
+      { "pool": "hot_pool", "cap": 10.0 },
+      { "pool": "cold_pool", "cap": 10.0 }
+    ],
+    "options": [
+      { "option": "hot", "pool": "hot_pool" },
+      { "option": "cold", "pool": "cold_pool" }
+    ]
+  },
+  "ticks": [
+    [ { "pool": "hot_pool", "usage": 30.0 } ],
+    [ { "pool": "hot_pool", "usage": 30.0 } ],
+    [ { "pool": "hot_pool", "usage": 30.0 } ],
+    [ { "pool": "hot_pool", "usage": 0.0 } ],
+    [ { "pool": "hot_pool", "usage": 0.0 } ],
+    [ { "pool": "hot_pool", "usage": 0.0 } ]
+  ],
+  "cursor": {},
+  "expectedOrder": ["cold", "hot"],
+  "expectedLambda": { "hot_pool": 1.5, "cold_pool": 0.0 }
+}

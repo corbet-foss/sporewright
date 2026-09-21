@@ -1,0 +1,27 @@
+{
+  "name": "01_capability_gate_drops_incapable",
+  "description": "Cross-core proof for gate_capabilities / gateCapabilities. A hostile target requires browser:full AND ip:residential. Three options declare financial 0.0 (so by cost alone all tie and sort by name). The offers map says only 'full' provides BOTH required caps; 'light' has the browser but datacenter IP, 'curl' has residential IP but no browser. After applying the gate at the job slice, resolve at that cursor must leave ONLY 'full'. Both cores apply their own gate primitive to the SAME base tensor and MUST produce the identical surviving order.",
+  "tensor": {
+    "levels": ["global", "source", "job"],
+    "cells": [
+      { "level": "global", "inst": "", "option": "", "dim": "financial", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "full", "dim": "financial", "v": 0.0 },
+      { "level": "global", "inst": "", "option": "light", "dim": "financial", "v": 0.0 },
+      { "level": "global", "inst": "", "option": "curl", "dim": "financial", "v": 0.0 }
+    ]
+  },
+  "gate": {
+    "writerLevel": "global",
+    "level": "job",
+    "inst": "j1",
+    "options": ["full", "light", "curl"],
+    "required": ["browser:full", "ip:residential"],
+    "offers": {
+      "full": ["browser:full", "ip:residential"],
+      "light": ["browser:full"],
+      "curl": ["ip:residential"]
+    }
+  },
+  "cursor": { "job": "j1" },
+  "expected": ["full"]
+}

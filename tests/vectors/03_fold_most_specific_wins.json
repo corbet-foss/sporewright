@@ -1,0 +1,15 @@
+{
+  "name": "03_fold_most_specific_wins",
+  "description": "The deepest (most specific) set tier wins the fold. A device-tier latency override for groq (0.05) beats its global 0.4 and flips the order so groq leads.",
+  "tensor": {
+    "levels": ["global", "workspace", "device"],
+    "cells": [
+      { "level": "device", "inst": "A", "option": "groq", "dim": "latency", "v": 0.05 },
+      { "level": "global", "inst": "", "option": "", "dim": "latency", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "cerebras", "dim": "latency", "v": 0.3 },
+      { "level": "global", "inst": "", "option": "groq", "dim": "latency", "v": 0.4 }
+    ]
+  },
+  "cursor": { "device": "A" },
+  "expected": ["groq", "cerebras"]
+}

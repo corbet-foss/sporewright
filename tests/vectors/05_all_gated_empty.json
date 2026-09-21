@@ -1,0 +1,16 @@
+{
+  "name": "05_all_gated_empty",
+  "description": "Every option is gated (reach = +inf) at the device tier, so resolve yields the empty queue.",
+  "tensor": {
+    "levels": ["global", "device"],
+    "cells": [
+      { "level": "device", "inst": "A", "option": "peerA", "dim": "reach", "v": "inf" },
+      { "level": "device", "inst": "A", "option": "peerB", "dim": "reach", "v": "inf" },
+      { "level": "global", "inst": "", "option": "", "dim": "latency", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "peerA", "dim": "latency", "v": 0.2 },
+      { "level": "global", "inst": "", "option": "peerB", "dim": "latency", "v": 0.1 }
+    ]
+  },
+  "cursor": { "device": "A" },
+  "expected": []
+}

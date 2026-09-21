@@ -1,0 +1,8 @@
+{
+  "name": "04_token_bucket_burst_throttle_refill",
+  "kind": "bucket",
+  "description": "Edge-local admission gate, capacity 3 refilling 1 token/sec, starting full at t=0. A burst of 3 admits empties it, the 4th is denied (the mid-window 429 the daily-quota price cannot stop). Half a second later still < 1 token ⇒ denied; at t=1.0 exactly one token has refilled ⇒ admitted; immediately denied again. Deterministic injected time → identical decisions on both cores.",
+  "bucket": { "capacity": 3.0, "refillPerSec": 1.0, "start": 0.0 },
+  "admits": [0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0],
+  "expectedAdmits": [true, true, true, false, false, true, false]
+}

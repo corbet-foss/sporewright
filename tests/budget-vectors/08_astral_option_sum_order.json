@@ -1,0 +1,41 @@
+{
+  "name": "08_astral_option_sum_order",
+  "kind": "usage",
+  "description": "Cross-core guard on aggregate_usage's OPTION-sum string order beyond ASCII: three options on one pool `shared`, one draw each — `z`=1.0, U+E000 (BMP private-use)=1e16, U+10000 (astral)=1.0 — declared in INSERTION order [astral, z, PUA], which equals NEITHER the code-point order (z < U+E000 < U+10000) NOR the naïve UTF-16 code-unit order (z < astral-lead-U+D800 < U+E000). The canonical code-point accumulation is ((0+1.0)+1e16)+1.0 = 10000000000000000 exactly (1.0 is lost rounding into 1e16, whose ULP is 2); the naïve UTF-16 accumulation is ((0+1.0)+1.0)+1e16 = 10000000000000002. Rust iterates option_pool via BTreeMap (UTF-8 byte order = code-point order); TS must sort by code point (tensor scmp), NOT by `<`. With step α=1 and cap 0 the tick gives λ_shared = 10000000000000000. Published as the shared budget:shared weight, option `a` (draws 1 unit, financial 0) scores λ; competitor `rival` is priced financial=10000000000000000 (== λ) so the two tie and break by name → [a, rival]. A core summing options in UTF-16 or insertion order lands ...002 instead, λ differs, the tie breaks the other way → [rival, a]. Captured from the live aggregate_usage→tick→publish→resolve on both cores.",
+  "tensor": {
+    "levels": ["global"],
+    "cells": [
+      { "level": "global", "inst": "", "option": "", "dim": "financial", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "a", "dim": "financial", "v": 0.0 },
+      { "level": "global", "inst": "", "option": "a", "dim": "budget:shared", "v": 1.0 },
+      { "level": "global", "inst": "", "option": "rival", "dim": "financial", "v": 10000000000000000 }
+    ]
+  },
+  "budget": {
+    "step": 1.0,
+    "priceLevel": "global",
+    "pools": [
+      { "pool": "shared", "cap": 0.0 }
+    ],
+    "options": [
+      { "option": "𐀀", "pool": "shared" },
+      { "option": "z", "pool": "shared" },
+      { "option": "", "pool": "shared" }
+    ]
+  },
+  "feeder": {
+    "levels": ["window", "job"],
+    "fromLevel": "job",
+    "toLevel": "window",
+    "toInst": "agg",
+    "writes": [
+      { "option": "𐀀", "inst": "j0", "usage": 1.0 },
+      { "option": "z", "inst": "j0", "usage": 1.0 },
+      { "option": "", "inst": "j0", "usage": 10000000000000000 }
+    ]
+  },
+  "cursor": {},
+  "expectedMeasured": { "shared": 10000000000000000 },
+  "expectedLambda": { "shared": 10000000000000000 },
+  "expectedOrder": ["a", "rival"]
+}

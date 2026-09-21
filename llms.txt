@@ -1,0 +1,45 @@
+# sporewright
+
+> sporewright is a self-learning, multi-objective router built as a single object: a sparse, high-dimensional **tensor of facts** and the operations on it. A product declares its axes and writes facts (`value` = learned/declared truth, `weight` = governing will); the engine slices that object to decide, for any kind of work (an LLM call, a scrape, a render, any task) across any set of options (providers, devices, peers), the order a device should try the options, what happens when one fails, and how that order improves from real measurements. The core is tiny, pure, and **clock-free** — versioning and durability are a persistence port backed by the product's own database. It ships as a Rust crate and a **decision-equivalent** TypeScript package so a server and a browser tab agree on every decision. LGPL-3.0-only WITH LGPL-3.0-linking-exception, pre-1.0, install from source (not yet on crates.io/npm).
+
+## The object
+
+Everything is a read or write on one sparse tensor of cells, each cell a fact at a coordinate `(level, instance, option, dimension)` carrying two co-located scalar layers — a **value** (the learned/declared truth; `+∞` is a gate that drops the option) and a **weight** (how much that value matters). A **cursor** is a point in the context space (`{workspace: acme, device: A}`) — the slice that says where you are. Sparsity makes the full grid free: an axis you aren't using curls to a point and costs nothing, so the model never compacts.
+
+- [README](https://github.com/corbet-foss/sporewright/blob/main/README.md): what it is, the object, decision-equivalent Rust + TypeScript quickstarts.
+- [The model (docs/MODEL.md)](https://github.com/corbet-foss/sporewright/blob/main/docs/MODEL.md): the authoritative contract — the cells, the two layers, the operators, write-down, sync, and every design choice.
+
+## Who it's for / not for
+
+- For: building an app or agent that routes **any work across heterogeneous options** (model providers, browser tabs, shells, containers, servers, peers) and needs cost/latency/reliability-aware ordering with failover and online learning; anyone who has outgrown a single static "pick the cheapest" config.
+- NOT for: a single option with no failover; routing on one fixed axis that never changes; cases where a static config file is genuinely enough.
+
+## The operators (all are slices, computed on demand, never stored)
+
+- **fold** — collapse the context (level) axes at a cursor; the **most-specific compatible cell wins** (CSS-cascade / git-config last-wins, not a deep-merge). Applies to value and weight independently.
+- **resolve** — *what's available, and how it fares.* For each option, contract the dimension axis to a score `Σ value·weight` (drop the option if any value is non-finite — `+∞`, `-∞`, `NaN` — a gate), order ascending → the **queue** (a vector along the option axis).
+- **reduce** — the one path *up*: the **median** over a context axis's instances, written to a coarser coordinate (a 50%-breakdown robust aggregation, the trusted integrity upgrade).
+- **corroborate** — the option-axis twin of `reduce`: rolls a fact's *existence* up the levels (independent-reporter consensus, self-report excluded), materializing an option into a coarser level once it clears a quorum.
+
+Writes obey **write-down** (Biba ⋆-integrity via a capability handle: a writer sets its own tier or finer, never coarser; the only path up is `reduce`/`corroborate`). The tensor stays **dumb** (facts + sparse inheritance + the write rule); robustness is the **orchestrator's active job** — it reads `support` (the evidence map, emergent from sparsity), spends its exploration budget on thin corners, and drives the weights to govern cost and quota.
+
+## The two cores (decision-equivalent)
+
+The load-bearing invariant: a message serialised by one core round-trips in the other, and both cores agree on the **decision** (`resolve`/`reduce`/`fold`/`corroborate`) — the wire round-trips, it is not byte-identical.
+
+- Rust crate — [`crates/sporewright/src/lib.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/lib.rs) (public surface), [`tensor.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/tensor.rs) (the object + operators), [`sync.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/sync.rs) (the device/wire shape), [`persist.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/persist.rs) (the persistence port), [`budget.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/budget.rs) (the price layer), [`config.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/config.rs) (declarative seeding), [`normalize.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/normalize.rs) (normalization), [`schedule.rs`](https://github.com/corbet-foss/sporewright/blob/main/crates/sporewright/src/schedule.rs) (work scheduling; Rust-only).
+- TypeScript package — [`packages/sporewright/src/index.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/index.ts) (public surface), [`tensor.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/tensor.ts), [`sync.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/sync.ts), [`persist.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/persist.ts), [`budget.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/budget.ts), [`config.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/config.ts), [`normalize.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/normalize.ts), [`trust.ts`](https://github.com/corbet-foss/sporewright/blob/main/packages/sporewright/src/trust.ts) (trust math; TS-only).
+
+Read the real source for exact signatures — do not invent API.
+
+## Install & run
+
+- From source: Rust `sporewright = { git = "https://github.com/corbet-foss/sporewright" }`; TypeScript imported from source (not yet published to crates.io/npm).
+- Test the cores: `cargo test -p sporewright` and, in `packages/sporewright`, `bun test`.
+
+## Optional / further reading
+
+- [SCOPE.md](https://github.com/corbet-foss/sporewright/blob/main/SCOPE.md): what lives in the engine (mechanism) vs the product (semantics + data).
+- [CONTRIBUTING.md](https://github.com/corbet-foss/sporewright/blob/main/CONTRIBUTING.md): the decision-equivalence invariant, build/test commands.
+- [AGENTS.md](https://github.com/corbet-foss/sporewright/blob/main/AGENTS.md): build/test/contribute reference for coding agents.
+- [Security](https://github.com/corbet-foss/sporewright/blob/main/SECURITY.md) · [Changelog](https://github.com/corbet-foss/sporewright/blob/main/CHANGELOG.md) · [OpenSSF self-assessment](https://github.com/corbet-foss/sporewright/blob/main/docs/openssf-best-practices.md)

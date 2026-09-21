@@ -1,0 +1,229 @@
+[
+  {
+    "name": "extract_analysis_L0_only",
+    "description": "Extract stage, single 'analysis' consumer, L0 seed only (no consumer/instance override). The 5-slot seed resolves in declared order — the PIPELINE_STAGES extract seed verbatim.",
+    "input": {
+      "chains": {
+        "extract": {
+          "chat": [
+            {
+              "provider": "mistral",
+              "model": "mistral-small-latest"
+            },
+            {
+              "provider": "mistral",
+              "model": "mistral-medium-latest"
+            },
+            {
+              "provider": "groq",
+              "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+            },
+            {
+              "provider": "google",
+              "model": "gemini-3-flash-preview"
+            },
+            {
+              "provider": "nvidia",
+              "model": "qwen/qwen3.5-122b-a10b"
+            }
+          ]
+        }
+      },
+      "stageId": "extract",
+      "consumerId": "analysis",
+      "capability": "chat"
+    },
+    "expected": [
+      {
+        "provider": "mistral",
+        "model": "mistral-small-latest"
+      },
+      {
+        "provider": "mistral",
+        "model": "mistral-medium-latest"
+      },
+      {
+        "provider": "groq",
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-flash-preview"
+      },
+      {
+        "provider": "nvidia",
+        "model": "qwen/qwen3.5-122b-a10b"
+      }
+    ]
+  },
+  {
+    "name": "tailor_text_L0_plus_L1_consumer_override",
+    "description": "Tailor stage, 'text' consumer. L0 is the shared tailor ballot; L1 is the consumer's quality picks. The L1 override re-orders the chain: the consumer-tier nvidia picks lead, then the L0 ballot. A cross-tier duplicate folds to its finest tier.",
+    "input": {
+      "chains": {
+        "tailor": {
+          "chat": [
+            {
+              "provider": "groq",
+              "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+            },
+            {
+              "provider": "mistral",
+              "model": "mistral-medium-latest"
+            },
+            {
+              "provider": "mistral",
+              "model": "mistral-small-latest"
+            }
+          ]
+        },
+        "tailor:text": {
+          "chat": [
+            {
+              "provider": "nvidia",
+              "model": "qwen/qwen3.5-122b-a10b"
+            },
+            {
+              "provider": "nvidia",
+              "model": "meta/llama-4-maverick-17b-128e-instruct"
+            }
+          ]
+        }
+      },
+      "stageId": "tailor",
+      "consumerId": "text",
+      "capability": "chat"
+    },
+    "expected": [
+      {
+        "provider": "nvidia",
+        "model": "qwen/qwen3.5-122b-a10b"
+      },
+      {
+        "provider": "nvidia",
+        "model": "meta/llama-4-maverick-17b-128e-instruct"
+      },
+      {
+        "provider": "groq",
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+      },
+      {
+        "provider": "mistral",
+        "model": "mistral-medium-latest"
+      },
+      {
+        "provider": "mistral",
+        "model": "mistral-small-latest"
+      }
+    ]
+  },
+  {
+    "name": "evaluate_fit_L0_L1_L2_full_cascade",
+    "description": "Evaluate stage (prefix 'eval'), 'fit' consumer, with all three tiers seeded plus a flat per-job L2 override. Order: the flat override leads, then persisted L2, then L1, then L0 — every tier by declared preference. Pins the full L0/L1/L2 fallback.",
+    "input": {
+      "chains": {
+        "eval": {
+          "chat": [
+            {
+              "provider": "groq",
+              "model": "llama-3.3-70b"
+            },
+            {
+              "provider": "cerebras",
+              "model": "llama3.1-8b"
+            }
+          ]
+        },
+        "eval:fit": {
+          "chat": [
+            {
+              "provider": "google",
+              "model": "gemini-3-flash-preview"
+            }
+          ]
+        },
+        "eval:fit:job-42": {
+          "chat": [
+            {
+              "provider": "nvidia",
+              "model": "qwen/qwen3.5-122b-a10b"
+            }
+          ]
+        }
+      },
+      "stageId": "evaluate",
+      "consumerId": "fit",
+      "capability": "chat",
+      "instanceId": "job-42",
+      "l2Override": [
+        {
+          "provider": "anthropic",
+          "model": "claude-opus-4"
+        }
+      ]
+    },
+    "expected": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4"
+      },
+      {
+        "provider": "nvidia",
+        "model": "qwen/qwen3.5-122b-a10b"
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-flash-preview"
+      },
+      {
+        "provider": "groq",
+        "model": "llama-3.3-70b"
+      },
+      {
+        "provider": "cerebras",
+        "model": "llama3.1-8b"
+      }
+    ]
+  },
+  {
+    "name": "radar_scraping_scrape_capability",
+    "description": "RADAR stage, 'scraping' consumer, 'scrape' capability — the non-chat service path. The PIPELINE_STAGES radar seed resolves in declared order; reading the 'scrape' capability only.",
+    "input": {
+      "chains": {
+        "radar": {
+          "scrape": [
+            {
+              "provider": "tinyfish",
+              "model": "fetch"
+            },
+            {
+              "provider": "jina",
+              "model": "reader"
+            },
+            {
+              "provider": "tavily",
+              "model": "extract"
+            }
+          ]
+        }
+      },
+      "stageId": "radar",
+      "consumerId": "scraping",
+      "capability": "scrape"
+    },
+    "expected": [
+      {
+        "provider": "tinyfish",
+        "model": "fetch"
+      },
+      {
+        "provider": "jina",
+        "model": "reader"
+      },
+      {
+        "provider": "tavily",
+        "model": "extract"
+      }
+    ]
+  }
+]

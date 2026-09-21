@@ -1,0 +1,11 @@
+{
+  "name": "04_writeup_rejected",
+  "description": "A seed at floor=job (the finest tier) writing level=global (coarser than its floor) is a write-UP. instantiate must reject it with `write-up`, identically on both cores — the value (0.0) is valid, so the rejection happens at the write step, not the decode.",
+  "config": {
+    "levels": ["global", "source", "job"],
+    "seeds": [
+      { "floor": "job", "level": "global", "inst": "", "option": "groq", "dim": "financial", "kind": "value", "value": 0.0 }
+    ]
+  },
+  "expected_error": "write-up"
+}

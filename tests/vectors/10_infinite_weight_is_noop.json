@@ -1,0 +1,18 @@
+{
+  "name": "10_infinite_weight_is_noop",
+  "description": "CROSS-CORE GUARD for the gate-vs-weight distinction (MODEL.md §2 / ROUTING-MODEL.md §3(C)): an infinite WEIGHT (not value) is a SILENT NO-OP and does NOT gate — resolve skips a non-finite weight term (`if w.is_finite()`), it does not drop the option. Every other non-finite sentinel in the corpus sits on a v/value field; this is the only one on a w field. Setup: two options over two dims. Shared weight latency=1.0, shared weight quality=1.0. Option `slow` carries an option-SPECIFIC +inf WEIGHT on `quality` (the no-op under test) plus a finite quality VALUE 0.9. fast: latency 0.1, quality 0.5 -> score 1.0*0.1 + 1.0*0.5 = 0.6. slow: latency 0.2; its quality term uses the +inf option-weight which is SKIPPED, contributing nothing, so score = 1.0*0.2 = 0.2. slow (0.2) < fast (0.6) -> [slow, fast]. This single expected order distinguishes the no-op from BOTH failure modes: if the +inf weight GATED the option, slow would be dropped -> [fast]; if it were honored as a +inf score term, slow would sort LAST -> [fast, slow]. The correct silent-skip is the ONLY behavior that yields [slow, fast] AND proves slow is still routable. A future change dropping the is_finite(w) guard would pass every other test while inverting this. Captured from the live resolve on both cores.",
+  "tensor": {
+    "levels": ["global"],
+    "cells": [
+      { "level": "global", "inst": "", "option": "", "dim": "latency", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "", "dim": "quality", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "fast", "dim": "latency", "v": 0.1 },
+      { "level": "global", "inst": "", "option": "fast", "dim": "quality", "v": 0.5 },
+      { "level": "global", "inst": "", "option": "slow", "dim": "latency", "v": 0.2 },
+      { "level": "global", "inst": "", "option": "slow", "dim": "quality", "v": 0.9 },
+      { "level": "global", "inst": "", "option": "slow", "dim": "quality", "w": "inf" }
+    ]
+  },
+  "cursor": {},
+  "expected": ["slow", "fast"]
+}

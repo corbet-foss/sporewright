@@ -1,0 +1,16 @@
+{
+  "name": "02_gate_drops_option",
+  "description": "A +inf value on any dim (reach) gates the option out of resolve entirely, even though peer's latency 0.1 would otherwise lead.",
+  "tensor": {
+    "levels": ["global", "device"],
+    "cells": [
+      { "level": "device", "inst": "A", "option": "peer", "dim": "reach", "v": "inf" },
+      { "level": "global", "inst": "", "option": "", "dim": "latency", "w": 1.0 },
+      { "level": "global", "inst": "", "option": "cerebras", "dim": "latency", "v": 0.3 },
+      { "level": "global", "inst": "", "option": "groq", "dim": "latency", "v": 0.4 },
+      { "level": "global", "inst": "", "option": "peer", "dim": "latency", "v": 0.1 }
+    ]
+  },
+  "cursor": { "device": "A" },
+  "expected": ["cerebras", "groq"]
+}

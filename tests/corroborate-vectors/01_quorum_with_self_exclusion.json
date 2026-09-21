@@ -1,0 +1,35 @@
+{
+  "name": "01_quorum_with_self_exclusion",
+  "kind": "corroborate",
+  "description": "CROSS-CORE GUARD for corroborate — the faker-resistant self-excluded-quorum count (named in the CONTRIBUTING equivalence invariant) had only per-core unit tests; this is the first SHARED vector both cores read. quorum=2. Subjects at the device level: D is attested by THREE independent reporters (A, B, C) AND vouches for itself (the D->D self-vote MUST be excluded by inst != option) — 3 independent >= 2 so D materializes 1.0. E is a faker with exactly ONE genuine independent reporter (B) PLUS its own self-vote (E->E); self-exclusion means the self-vote does NOT count, so E has 1 independent < quorum — NOT materialized. This is the load-bearing self-exclusion edge: if self-exclusion broke, E's self-vote would tip it to count 2 and FALSELY materialize. F is attested by exactly ONE independent reporter (A) — count 1 == quorum-1, just BELOW threshold — NOT materialized. G is attested by exactly TWO independent reporters (A, B) — count 2 == quorum, exactly AT threshold — materializes 1.0. A reporter that writes a non-positive (0.0) attestation for subject H (from A) does NOT count (the > 0 attestation test), leaving H with 1 positive (B) — below quorum — NOT materialized. This pins all four decision edges of corroborate: self-exclusion (E), the >0 attestation gate (H), and the quorum boundary on both sides (F ==quorum-1 absent, G ==quorum present). The `materialized` list is the EXACT set of cells that must exist at the toLevel after corroborate; every `absent` subject must read None. Captured from the live corroborate on both cores.",
+  "feeder": {
+    "levels": ["global", "device"],
+    "fromLevel": "device",
+    "toLevel": "global",
+    "toInst": "",
+    "quorum": 2,
+    "writes": [
+      { "inst": "A", "option": "D", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "B", "option": "D", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "C", "option": "D", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "D", "option": "D", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "B", "option": "E", "dim": "can_magic", "value": 1.0 },
+      { "inst": "E", "option": "E", "dim": "can_magic", "value": 1.0 },
+      { "inst": "A", "option": "F", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "A", "option": "G", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "B", "option": "G", "dim": "can_scrape", "value": 1.0 },
+      { "inst": "A", "option": "H", "dim": "can_scrape", "value": 0.0 },
+      { "inst": "B", "option": "H", "dim": "can_scrape", "value": 1.0 }
+    ]
+  },
+  "cursor": {},
+  "materialized": [
+    { "option": "D", "dim": "can_scrape", "value": 1.0 },
+    { "option": "G", "dim": "can_scrape", "value": 1.0 }
+  ],
+  "absent": [
+    { "option": "E", "dim": "can_magic" },
+    { "option": "F", "dim": "can_scrape" },
+    { "option": "H", "dim": "can_scrape" }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "config": {
+    "levels": [
+      "global",
+      "source",
+      "job"
+    ],
+    "seeds": [
+      {
+        "dim": "financial",
+        "floor": "global",
+        "inst": "",
+        "kind": "weight",
+        "level": "global",
+        "option": "",
+        "value": 1.0
+      },
+      {
+        "dim": "latency",
+        "floor": "global",
+        "inst": "",
+        "kind": "weight",
+        "level": "global",
+        "option": "",
+        "value": 0.001
+      },
+      {
+        "dim": "reliability",
+        "floor": "global",
+        "inst": "",
+        "kind": "weight",
+        "level": "global",
+        "option": "",
+        "value": 4.0
+      },
+      {
+        "dim": "financial",
+        "floor": "global",
+        "inst": "",
+        "kind": "value",
+        "level": "global",
+        "option": "dev:browser:b1",
+        "value": 0.0
+      },
+      {
+        "dim": "financial",
+        "floor": "global",
+        "inst": "",
+        "kind": "value",
+        "level": "global",
+        "option": "dev:container:c1",
+        "value": 0.1
+      },
+      {
+        "dim": "financial",
+        "floor": "global",
+        "inst": "",
+        "kind": "value",
+        "level": "global",
+        "option": "dev:render:r1",
+        "value": 1.0
+      }
+    ]
+  },
+  "cursor": {},
+  "description": "The router.rs seed_fleet shape as a TensorConfig: three shared judgement weights at the global slot, then one financial value per device. Instantiating this must be byte-identical to those imperative Writer calls, and resolve free-browser-first.",
+  "expected": {
+    "cells": [
+      {
+        "dim": "financial",
+        "inst": "",
+        "level": "global",
+        "option": "",
+        "w": 1.0
+      },
+      {
+        "dim": "latency",
+        "inst": "",
+        "level": "global",
+        "option": "",
+        "w": 0.001
+      },
+      {
+        "dim": "reliability",
+        "inst": "",
+        "level": "global",
+        "option": "",
+        "w": 4.0
+      },
+      {
+        "dim": "financial",
+        "inst": "",
+        "level": "global",
+        "option": "dev:browser:b1",
+        "v": 0.0
+      },
+      {
+        "dim": "financial",
+        "inst": "",
+        "level": "global",
+        "option": "dev:container:c1",
+        "v": 0.1
+      },
+      {
+        "dim": "financial",
+        "inst": "",
+        "level": "global",
+        "option": "dev:render:r1",
+        "v": 1.0
+      }
+    ],
+    "levels": [
+      "global",
+      "source",
+      "job"
+    ]
+  },
+  "name": "01_seed_fleet",
+  "resolve_expected": [
+    "dev:browser:b1",
+    "dev:container:c1",
+    "dev:render:r1"
+  ]
+}

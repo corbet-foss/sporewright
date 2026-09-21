@@ -1,0 +1,99 @@
+{
+  "config": {
+    "levels": [
+      "global",
+      "job"
+    ],
+    "seeds": [
+      {
+        "dim": "latency",
+        "floor": "global",
+        "inst": "",
+        "kind": "weight",
+        "level": "global",
+        "option": "",
+        "value": 1.0
+      },
+      {
+        "dim": "latency",
+        "floor": "global",
+        "inst": "",
+        "kind": "value",
+        "level": "global",
+        "option": "keep",
+        "value": 9.0
+      },
+      {
+        "dim": "latency",
+        "floor": "global",
+        "inst": "",
+        "kind": "value",
+        "level": "global",
+        "option": "keep",
+        "value": 0.2
+      },
+      {
+        "dim": "latency",
+        "floor": "global",
+        "inst": "",
+        "kind": "value",
+        "level": "global",
+        "option": "drop",
+        "value": 0.1
+      },
+      {
+        "dim": "priv:residential",
+        "floor": "job",
+        "inst": "j1",
+        "kind": "value",
+        "level": "job",
+        "option": "drop",
+        "value": "inf"
+      }
+    ]
+  },
+  "cursor": {
+    "job": "j1"
+  },
+  "description": "A gate (a non-finite +inf value, no special kind) drops an option at a job slice; and a later seed at the same coordinate overwrites an earlier one (declared order is load-bearing). After both, resolve keeps only the surviving option.",
+  "expected": {
+    "cells": [
+      {
+        "dim": "latency",
+        "inst": "",
+        "level": "global",
+        "option": "",
+        "w": 1.0
+      },
+      {
+        "dim": "latency",
+        "inst": "",
+        "level": "global",
+        "option": "drop",
+        "v": 0.1
+      },
+      {
+        "dim": "latency",
+        "inst": "",
+        "level": "global",
+        "option": "keep",
+        "v": 0.2
+      },
+      {
+        "dim": "priv:residential",
+        "inst": "j1",
+        "level": "job",
+        "option": "drop",
+        "v": "inf"
+      }
+    ],
+    "levels": [
+      "global",
+      "job"
+    ]
+  },
+  "name": "03_gate_and_overwrite",
+  "resolve_expected": [
+    "keep"
+  ]
+}

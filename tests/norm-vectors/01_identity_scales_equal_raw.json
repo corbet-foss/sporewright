@@ -1,0 +1,20 @@
+{
+  "name": "01_identity_scales_equal_raw",
+  "description": "With all scales 1.0 the normalizer is the identity: effectiveWeight(dim, raw) == raw, so the resolved order is exactly the raw weighted-sum order. financial spans ~0.01, latency ~5, equal raw MRS weights 1.0 — latency magnitude dominates, so the fast option b leads (the lexicographic-by-latency defect). This pins that a no-op normalizer changes nothing.",
+  "tensor": {
+    "levels": ["global"],
+    "cells": [
+      { "level": "global", "inst": "", "option": "a", "dim": "financial", "v": 0.002 },
+      { "level": "global", "inst": "", "option": "a", "dim": "latency", "v": 5.0 },
+      { "level": "global", "inst": "", "option": "b", "dim": "financial", "v": 0.01 },
+      { "level": "global", "inst": "", "option": "b", "dim": "latency", "v": 0.5 }
+    ]
+  },
+  "norm": {
+    "writeLevel": "global",
+    "scales": { "financial": 1.0, "latency": 1.0 },
+    "weights": { "financial": 1.0, "latency": 1.0 }
+  },
+  "cursor": {},
+  "expected": ["b", "a"]
+}
