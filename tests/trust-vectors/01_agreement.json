@@ -1,0 +1,10 @@
+{
+  "name": "agreement",
+  "incomingTrust": 0.5,
+  "currentTrust": 0.5,
+  "agree": true,
+  "freshness": 1.0,
+  "sourceVolatility": 0.0,
+  "expectedIncomingTrust": 0.51,
+  "expectedCurrentTrust": 0.51
+}

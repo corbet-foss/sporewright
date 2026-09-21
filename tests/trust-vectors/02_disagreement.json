@@ -1,0 +1,10 @@
+{
+  "name": "stable-source-disagreement",
+  "incomingTrust": 0.5,
+  "currentTrust": 0.5,
+  "agree": false,
+  "freshness": 1.0,
+  "sourceVolatility": 0.0,
+  "expectedIncomingTrust": 0.48,
+  "expectedCurrentTrust": 0.48
+}

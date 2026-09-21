@@ -1,0 +1,131 @@
+{
+  "name": "06_usage_feeder_sum_order",
+  "kind": "usage",
+  "description": "Cross-core guard on the budget FEEDER's two summation orders — the ONLY vector that drives raw usage → reduce_sum → aggregate_usage (the price kind feeds measured directly and bypasses both). One pool `shared` is fed by THREE options a,b,c of disparate magnitude, written in INSERTION order c,b,a (≠ the sorted a,b,c). Each option draws across THREE instances j0,j1,j2 with the BIG draw written FIRST (j0), so the feeder's insertion order (j0,j1,j2) differs from the ascending-value order — exercising reduce_sum's instance-sum order. Per-option ascending sums: a=1+1+1e16, b=2+3+4=9, c=5+6+1e15. aggregate_usage then sums those per-option totals in NAME order (a,b,c): ((1e16+2)+9)+(1e15+7) = 11000000000000024 exactly. IEEE-754 addition is non-associative, so a core that summed instances or options in any other order (e.g. the old TS Map-insertion order, or summing the 1e16 draw before the small ones) would land a DIFFERENT bit pattern (proven: insertion-order sums differ by 2 ULP). With step α=1 and cap 0 the single tick gives λ_shared = 1·(11000000000000024-0) = 11000000000000024 (an exact integer chosen so the literal round-trips identically through both JSON parsers). Published as the shared budget:shared weight, option `a` (draws 1 unit, financial 0) scores λ; competitor `rival` is priced financial=11000000000000024 (== λ) so the two tie and break by name → [a, rival]. Any divergence in either summation order changes measured → λ → the tie, flipping the queue. Captured from the live aggregate_usage→tick→publish→resolve on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "financial",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "financial",
+        "v": 0.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "budget:shared",
+        "v": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "rival",
+        "dim": "financial",
+        "v": 11000000000000024
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "budget": {
+    "step": 1.0,
+    "priceLevel": "global",
+    "pools": [
+      {
+        "pool": "shared",
+        "cap": 0.0
+      }
+    ],
+    "options": [
+      {
+        "option": "c",
+        "pool": "shared"
+      },
+      {
+        "option": "b",
+        "pool": "shared"
+      },
+      {
+        "option": "a",
+        "pool": "shared"
+      }
+    ]
+  },
+  "feeder": {
+    "levels": [
+      "window",
+      "job"
+    ],
+    "fromLevel": "job",
+    "toLevel": "window",
+    "toInst": "agg",
+    "writes": [
+      {
+        "option": "c",
+        "inst": "j0",
+        "usage": 1E+15
+      },
+      {
+        "option": "c",
+        "inst": "j1",
+        "usage": 5.0
+      },
+      {
+        "option": "c",
+        "inst": "j2",
+        "usage": 6.0
+      },
+      {
+        "option": "b",
+        "inst": "j0",
+        "usage": 3.0
+      },
+      {
+        "option": "b",
+        "inst": "j1",
+        "usage": 2.0
+      },
+      {
+        "option": "b",
+        "inst": "j2",
+        "usage": 4.0
+      },
+      {
+        "option": "a",
+        "inst": "j0",
+        "usage": 1E+16
+      },
+      {
+        "option": "a",
+        "inst": "j1",
+        "usage": 1.0
+      },
+      {
+        "option": "a",
+        "inst": "j2",
+        "usage": 1.0
+      }
+    ]
+  },
+  "cursor": {},
+  "expectedMeasured": {
+    "shared": 11000000000000024
+  },
+  "expectedLambda": {
+    "shared": 11000000000000024
+  },
+  "expectedOrder": [
+    "a",
+    "rival"
+  ]
+}

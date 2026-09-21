@@ -1,0 +1,97 @@
+{
+  "name": "04_value_side_min_max",
+  "description": "CROSS-CORE GUARD for normalize_value — the VALUE-side min-max route. The three existing norm vectors (01-03) all drive only the weight-side effective_weight path; this is the first shared vector on the value-side route the docs call 'decision-equivalent across cores'. Presence of the `valueNorm` block switches the harness to: for each (option, dim) raw value, write Norm.normalize_value(raw, lo, hi) back as the value, then write shared weights, resolve, and assert BOTH the per-cell normalized values (`expectedValues`, bit-exact) and the resolved order. Dim `cost` has range lo=10, hi=20. Cases: a.cost raw 5 is BELOW lo -> clamp to 0.0; b.cost raw 15 is IN range -> (15-10)/(20-10) = 0.5; c.cost raw 30 is ABOVE hi -> clamp to 1.0; d.cost raw +inf is a GATE -> passed through as +inf (NOT normalized away) so resolve DROPS d. Dim `flat` (only on b) has a DEGENERATE range lo=5, hi=5 -> identity, returning the raw 0.0 unchanged (no divide-by-zero, no non-finite leak). Shared weights cost=1.0, flat=1.0. Scores: a=0.0, b=0.5+0.0=0.5, c=1.0; d gated out -> order [a, b, c]. This pins the clamp on both boundaries, the in-range linear map, the degenerate-range identity, and the gate passthrough — every decision edge of normalize_value, identically on both cores. Captured from the live normalize_value + resolve on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "cost",
+        "v": 5.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "b",
+        "dim": "cost",
+        "v": 15.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "b",
+        "dim": "flat",
+        "v": 0.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "c",
+        "dim": "cost",
+        "v": 30.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "d",
+        "dim": "cost",
+        "v": "inf"
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "valueNorm": {
+    "writeLevel": "global",
+    "ranges": {
+      "cost": {
+        "lo": 10.0,
+        "hi": 20.0
+      },
+      "flat": {
+        "lo": 5.0,
+        "hi": 5.0
+      }
+    },
+    "weights": {
+      "cost": 1.0,
+      "flat": 1.0
+    }
+  },
+  "expectedValues": [
+    {
+      "option": "a",
+      "dim": "cost",
+      "value": 0.0
+    },
+    {
+      "option": "b",
+      "dim": "cost",
+      "value": 0.5
+    },
+    {
+      "option": "b",
+      "dim": "flat",
+      "value": 0.0
+    },
+    {
+      "option": "c",
+      "dim": "cost",
+      "value": 1.0
+    }
+  ],
+  "expectedGated": [
+    {
+      "option": "d",
+      "dim": "cost"
+    }
+  ],
+  "cursor": {},
+  "expected": [
+    "a",
+    "b",
+    "c"
+  ]
+}

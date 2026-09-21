@@ -1,0 +1,55 @@
+{
+  "name": "02_normalized_balanced",
+  "description": "DELIBERATE new golden. Scale each dim by its native span (financial 0.01, latency 5.0) and keep equal MRS weights 1.0. effectiveWeight folds 1/scale into the weight, so resolve scores over commensurable [0,1]-ish costs. a: 0.002/0.01 + 5/5 = 0.2+1.0 = 1.2 ; b: 0.01/0.01 + 0.5/5 = 1.0+0.1 = 1.1. b still leads but the gap collapsed from latency-only (a was crushed) to an honest two-objective sum — the units fix. Captured from the live normalized resolve on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "financial",
+        "v": 0.002
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "latency",
+        "v": 5.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "b",
+        "dim": "financial",
+        "v": 0.01
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "b",
+        "dim": "latency",
+        "v": 0.5
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "norm": {
+    "writeLevel": "global",
+    "scales": {
+      "financial": 0.01,
+      "latency": 5.0
+    },
+    "weights": {
+      "financial": 1.0,
+      "latency": 1.0
+    }
+  },
+  "cursor": {},
+  "expected": [
+    "b",
+    "a"
+  ]
+}

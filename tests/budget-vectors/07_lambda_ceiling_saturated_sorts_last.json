@@ -1,0 +1,72 @@
+{
+  "name": "07_lambda_ceiling_saturated_sorts_last",
+  "kind": "price",
+  "description": "CROSS-CORE guard on the λ FINITE CEILING (MAX_LAMBDA = 1e300). A runaway step on a pool far over cap drives λ to +∞ without the clamp; since resolve SKIPS a non-finite weight (`if w.is_finite()`), a +∞-priced (maximally saturated) option would score as FREE and sort to the FRONT — the exact INVERSION of the intended shed. With the clamp, λ pins to the finite ceiling 1e300 and the saturated option sorts LAST. Pool `p` has cap 0 and step α=1e300; a single tick with usage 1e10 gives next = 1e300·(1e10−0) = 1e310, which OVERFLOWS f64 to +∞ — the genuine runaway the clamp must catch. Without the is_finite()/MAX_LAMBDA clamp `next>0 ? next : 0` stores +∞ and resolve routes `saturated` FREE to the FRONT; with the clamp λ pins to MAX_LAMBDA = 1e300 (finite). This input is chosen so the golden is NON-VACUOUS: it actually overflows, so removing the clamp flips the queue (verified). Option `saturated` draws 1 unit on `p` (financial 0) → score λ·1 = 1e300; `rival` is priced financial 1.0 → score 1.0. So rival leads and saturated trails. expectedLambda.p == 1e300 (FINITE — never +∞), expectedOrder == [rival, saturated]. Captured from the live tick→publish→resolve on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "financial",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "saturated",
+        "dim": "financial",
+        "v": 0.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "saturated",
+        "dim": "budget:p",
+        "v": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "rival",
+        "dim": "financial",
+        "v": 1.0
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "budget": {
+    "step": 1E+300,
+    "priceLevel": "global",
+    "pools": [
+      {
+        "pool": "p",
+        "cap": 0.0
+      }
+    ],
+    "options": [
+      {
+        "option": "saturated",
+        "pool": "p"
+      }
+    ]
+  },
+  "ticks": [
+    [
+      {
+        "pool": "p",
+        "usage": 1E+10
+      }
+    ]
+  ],
+  "cursor": {},
+  "expectedLambda": {
+    "p": 1E+300
+  },
+  "expectedOrder": [
+    "rival",
+    "saturated"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "name": "04_tie_broken_by_name",
+  "description": "Three options at the identical score 0.5; the tie is broken by option name ascending (alpha, mike, zebra).",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "alpha",
+        "dim": "latency",
+        "v": 0.5
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "mike",
+        "dim": "latency",
+        "v": 0.5
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "zebra",
+        "dim": "latency",
+        "v": 0.5
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "cursor": {},
+  "expected": [
+    "alpha",
+    "mike",
+    "zebra"
+  ]
+}

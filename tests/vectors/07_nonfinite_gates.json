@@ -1,0 +1,88 @@
+{
+  "name": "07_nonfinite_gates",
+  "description": "Any NON-FINITE value gates an option out of resolve — +inf, -inf, and NaN alike. Regression guard for the gate hardening: -inf must NOT anti-gate (it must not sort first on a w*(-inf) score) and NaN must NOT linger in the queue; both drop exactly like +inf. Only the finite-valued options remain, ordered ascending.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "alpha",
+        "dim": "latency",
+        "v": 0.1
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "beta",
+        "dim": "latency",
+        "v": 0.2
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "pos",
+        "dim": "latency",
+        "v": 0.05
+      },
+      {
+        "layer": "device",
+        "scope": {
+          "device": "A"
+        },
+        "option": "pos",
+        "dim": "reach",
+        "v": "inf"
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "neg",
+        "dim": "latency",
+        "v": 0.03
+      },
+      {
+        "layer": "device",
+        "scope": {
+          "device": "A"
+        },
+        "option": "neg",
+        "dim": "reach",
+        "v": "-inf"
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "nanopt",
+        "dim": "latency",
+        "v": 0.04
+      },
+      {
+        "layer": "device",
+        "scope": {
+          "device": "A"
+        },
+        "option": "nanopt",
+        "dim": "reach",
+        "v": "nan"
+      }
+    ],
+    "layers": [
+      "global",
+      "device"
+    ]
+  },
+  "cursor": {
+    "device": "A"
+  },
+  "expected": [
+    "alpha",
+    "beta"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "09_astral_tiebreak",
+  "description": "CROSS-CORE PARITY on the tie-break comparator across the BMP/astral boundary. Two options at the IDENTICAL score (0.5) so the queue is decided purely by option-name order. The names straddle the boundary: one is the BMP private-use char U+E000, the other is the astral char U+10000 (surrogate pair U+D800 U+DC00). Rust orders strings by UTF-8 byte == Unicode code point, so U+E000 (57344) < U+10000 (65536) -> [U+E000, U+10000]. The naive UTF-16 code-UNIT comparator would compare the astral lead surrogate U+D800 (55296) against U+E000 and put the astral char FIRST -> the OPPOSITE queue. TS scmp was changed to a code-POINT comparator so both cores now produce the code-point (Rust/UTF-8) order. This vector pins it: it MUST pass on BOTH cores and would have failed the old UTF-16 TS comparator.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "v": 0.5
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "𐀀",
+        "dim": "latency",
+        "v": 0.5
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "cursor": {},
+  "expected": [
+    "",
+    "𐀀"
+  ]
+}

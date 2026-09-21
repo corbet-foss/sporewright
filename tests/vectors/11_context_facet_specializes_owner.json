@@ -1,0 +1,15 @@
+{
+  "name": "11_context_facet_specializes_owner",
+  "description": "A free capability facet specializes a workspace-owned preference without becoming another owner layer.",
+  "tensor": {
+    "layers": ["workspace", "stage"],
+    "cells": [
+      { "layer": "workspace", "scope": {}, "option": "", "dim": "cost", "w": 1 },
+      { "layer": "workspace", "scope": {}, "option": "local", "dim": "cost", "v": 0.2 },
+      { "layer": "workspace", "scope": {}, "option": "remote", "dim": "cost", "v": 0.3 },
+      { "layer": "workspace", "scope": { "capability": "chat" }, "option": "local", "dim": "cost", "v": 0.8 }
+    ]
+  },
+  "cursor": { "capability": "chat", "stage": "evaluate" },
+  "expected": ["remote", "local"]
+}

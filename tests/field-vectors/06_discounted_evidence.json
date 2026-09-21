@@ -1,0 +1,49 @@
+{
+  "name": "discounted_evidence",
+  "layers": ["leaf"],
+  "declarations": [
+    {
+      "kind": "prior",
+      "address": {},
+      "option": "changing",
+      "dimension": "cost",
+      "value": 0
+    },
+    {
+      "kind": "prior",
+      "address": {},
+      "option": "stable",
+      "dimension": "cost",
+      "value": 1
+    }
+  ],
+  "observations": [
+    {
+      "address": { "leaf": "now" },
+      "option": "changing",
+      "dimension": "cost",
+      "value": 4,
+      "variance": 0.01
+    }
+  ],
+  "maintenance": [
+    {
+      "kind": "discount",
+      "address": { "leaf": "now" },
+      "option": "changing",
+      "dimension": "cost",
+      "factor": 0
+    }
+  ],
+  "queries": [
+    {
+      "address": { "leaf": "now" },
+      "temperature": 0,
+      "expected": ["changing", "stable"],
+      "means": {
+        "changing": { "cost": 0 },
+        "stable": { "cost": 1 }
+      }
+    }
+  ]
+}

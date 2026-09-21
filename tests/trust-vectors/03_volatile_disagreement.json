@@ -1,0 +1,10 @@
+{
+  "name": "volatile-source-disagreement",
+  "incomingTrust": 0.5,
+  "currentTrust": 0.5,
+  "agree": false,
+  "freshness": 1.0,
+  "sourceVolatility": 0.75,
+  "expectedIncomingTrust": 0.495,
+  "expectedCurrentTrust": 0.495
+}

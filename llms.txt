@@ -1,0 +1,67 @@
+# sporewright
+
+> Sporewright provides resilient pull-based work distribution over heterogeneous,
+> transient, and non-deterministic actors. It ships a decision-equivalent Rust and
+> TypeScript core under LGPL-3.0-only WITH LGPL-3.0-linking-exception,
+> and is pre-1.0.
+
+## Core model
+
+A product declares an ordered address schema. Every exact prefix may contribute a
+numeric residual for an option and dimension:
+
+`Q(address, option, dimension) = sum(residual(prefix, option, dimension))`
+
+Broader policy and belief therefore remain visible; deeper branches strengthen,
+neutralize, or invert them rather than replacing them. Hard feasibility gates compose
+by conjunction. Multi-objective scores use normalized lower-is-better dimensions and
+additive path-composed weights.
+
+The standard learned field is a hierarchical Gaussian model. Observations attach at
+the realized address as natural sufficient statistics. Cached likelihood messages
+update only the leaf-to-root path; a query sends cavity distributions only down its
+requested path. Curiosity ranks by
+`expected_score - temperature * sqrt(score_variance)` and a separate pure planner
+enforces explicit execution-count and total-cost caps.
+
+Routing receipts retain the field revision, exact address, alternatives, uncertainty,
+contributing prefixes, and selected options. Retired subtrees can compact into exact
+parent likelihood messages; explicit evidence discount lets product-owned clocks or
+drift policy reopen uncertainty.
+
+## Scale contract
+
+- No address Cartesian product.
+- No scan over unrelated workspaces, tasks, actors, or history.
+- Resolve: `O(path declarations + depth * options * dimensions + options log options)`.
+- Feedback: `O(address depth)`.
+- Storage: explicitly declared/observed sparse parameter nodes; retired leaves can be
+  compacted.
+
+## Product boundary
+
+Sporewright owns pure address traversal, residual composition, Gaussian messages,
+curiosity math, receipts, compaction, serialization, work counters, writer authority,
+and cross-core vectors. Products own vocabulary, normalization, variances, clocks,
+deduplication, drift policy, hard budgets, candidate population, leases, execution,
+persistence, authentication, and transport. A central orchestrator and a P2P product
+use the same field algebra.
+
+## Source map
+
+- [README](https://github.com/corbet-foss/sporewright/blob/main/README.md)
+- [Normative model](https://github.com/corbet-foss/sporewright/blob/main/docs/MODEL.md)
+- [Routing guide](https://github.com/corbet-foss/sporewright/blob/main/docs/ROUTING-MODEL.md)
+- [Scope](https://github.com/corbet-foss/sporewright/blob/main/SCOPE.md)
+- Rust core: `crates/sporewright/src/field.rs`, `explore.rs`
+- TypeScript core: `packages/sporewright/src/field.ts`, `explore.ts`
+- Shared vectors: `tests/field-vectors/*.json`
+
+The old `tensor` and `sync` modules remain temporarily for adopter migration. New
+integrations use `field` and `explore`.
+
+## Verification
+
+- Rust: `cargo build --workspace && cargo test --workspace && cargo fmt --all --check && cargo clippy --workspace --all-targets -- -D warnings`
+- TypeScript core: in `packages/sporewright`, `bun test && bunx tsc --noEmit`
+- LLM router: in `packages/router`, `bun test && bunx tsc --noEmit`

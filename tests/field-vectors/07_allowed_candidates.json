@@ -1,0 +1,19 @@
+{
+  "name": "allowed_candidates_bound_history",
+  "layers": ["workspace", "task"],
+  "declarations": [
+    { "kind": "prior", "address": {}, "option": "current", "dimension": "failure", "value": 0.2 },
+    { "kind": "prior", "address": {}, "option": "retired", "dimension": "failure", "value": -10.0 },
+    { "kind": "prior", "address": { "workspace": "other" }, "option": "other-branch", "dimension": "failure", "value": -20.0 }
+  ],
+  "observations": [],
+  "queries": [
+    {
+      "address": { "workspace": "target", "task": "run" },
+      "temperature": 0.0,
+      "allowed": ["current", "absent"],
+      "expected": ["current"],
+      "means": { "current": { "failure": 0.2 } }
+    }
+  ]
+}

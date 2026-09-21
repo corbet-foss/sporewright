@@ -1,0 +1,10 @@
+{
+  "name": "asymmetric-agreement",
+  "incomingTrust": 0.5,
+  "currentTrust": 0.8,
+  "agree": true,
+  "freshness": 1.0,
+  "sourceVolatility": 1.0,
+  "expectedIncomingTrust": 0.516,
+  "expectedCurrentTrust": 0.81
+}

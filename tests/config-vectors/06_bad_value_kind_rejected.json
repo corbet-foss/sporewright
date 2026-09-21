@@ -1,0 +1,21 @@
+{
+  "name": "06_bad_value_kind_rejected",
+  "description": "A seed declaring kind=bytes but carrying a numeric (f64) value is a kind/payload mismatch — a malformed CELL, not an unknown TIER. instantiate must reject it with `bad-value-kind` (NOT `unknown-level`), identically on both cores. The floor/level are valid, so the rejection is the decode, isolating the new variant.",
+  "config": {
+    "seeds": [
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "groq",
+        "dim": "doc",
+        "kind": "bytes",
+        "value": 0.5
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "expected_error": "bad-value-kind"
+}

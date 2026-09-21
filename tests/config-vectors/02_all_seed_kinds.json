@@ -1,0 +1,90 @@
+{
+  "config": {
+    "seeds": [
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "groq",
+        "dim": "latency",
+        "kind": "value",
+        "value": 0.4
+      },
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "kind": "weight",
+        "value": 1.0
+      },
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "groq",
+        "dim": "latency",
+        "kind": "option-weight",
+        "value": 2.0
+      },
+      {
+        "floor": "workspace",
+        "layer": "workspace",
+        "scope": {
+          "workspace": "acme"
+        },
+        "option": "doc:cv",
+        "dim": "state",
+        "kind": "bytes",
+        "value": {
+          "b64": "AAEC/zw+"
+        }
+      }
+    ],
+    "layers": [
+      "global",
+      "workspace"
+    ]
+  },
+  "cursor": {},
+  "description": "All four seed kinds in one config: a scalar value, an option-shared weight, a per-option gas-pedal weight, and a document blob seeded at the finer 'workspace' tier. Proves every Writer setter has a faithful declarative twin on both cores.",
+  "expected": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "groq",
+        "dim": "latency",
+        "v": 0.4,
+        "w": 2.0
+      },
+      {
+        "layer": "workspace",
+        "scope": {
+          "workspace": "acme"
+        },
+        "option": "doc:cv",
+        "dim": "state",
+        "v": {
+          "b64": "AAEC/zw+"
+        }
+      }
+    ],
+    "layers": [
+      "global",
+      "workspace"
+    ]
+  },
+  "name": "02_all_seed_kinds",
+  "resolve_expected": [
+    "groq"
+  ]
+}

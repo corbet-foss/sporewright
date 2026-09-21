@@ -1,0 +1,22 @@
+{
+  "name": "05_token_bucket_cap_and_backwards_time",
+  "kind": "bucket",
+  "description": "Capacity 2 refilling 5 tokens/sec, full at t=0. Long idle to t=100 would refill 500 tokens but the cap holds it at 2: two admits succeed, the third is denied. Then a backwards time reading (t=50 < last=100) refills nothing — never a refund — so it stays denied. Deterministic on both cores.",
+  "bucket": {
+    "capacity": 2.0,
+    "refillPerSec": 5.0,
+    "start": 0.0
+  },
+  "admits": [
+    100.0,
+    100.0,
+    100.0,
+    50.0
+  ],
+  "expectedAdmits": [
+    true,
+    true,
+    false,
+    false
+  ]
+}

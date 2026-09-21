@@ -1,0 +1,229 @@
+[
+  {
+    "name": "extract_analysis_L0_only",
+    "description": "Extract stage, single 'analysis' consumer, stage declarations only. The five bounded stage residuals resolve in their declared order.",
+    "input": {
+      "chains": {
+        "extract": {
+          "chat": [
+            {
+              "provider": "mistral",
+              "model": "mistral-small-latest"
+            },
+            {
+              "provider": "mistral",
+              "model": "mistral-medium-latest"
+            },
+            {
+              "provider": "groq",
+              "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+            },
+            {
+              "provider": "google",
+              "model": "gemini-3-flash-preview"
+            },
+            {
+              "provider": "nvidia",
+              "model": "qwen/qwen3.5-122b-a10b"
+            }
+          ]
+        }
+      },
+      "stageId": "extract",
+      "consumerId": "analysis",
+      "capability": "chat"
+    },
+    "expected": [
+      {
+        "provider": "mistral",
+        "model": "mistral-small-latest"
+      },
+      {
+        "provider": "mistral",
+        "model": "mistral-medium-latest"
+      },
+      {
+        "provider": "groq",
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-flash-preview"
+      },
+      {
+        "provider": "nvidia",
+        "model": "qwen/qwen3.5-122b-a10b"
+      }
+    ]
+  },
+  {
+    "name": "tailor_text_L0_plus_L1_consumer_override",
+    "description": "Tailor stage and text consumer. Consumer residuals add a stronger local preference, so the NVIDIA choices lead the broader stage choices. A repeated option accumulates both contributions and appears once.",
+    "input": {
+      "chains": {
+        "tailor": {
+          "chat": [
+            {
+              "provider": "groq",
+              "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+            },
+            {
+              "provider": "mistral",
+              "model": "mistral-medium-latest"
+            },
+            {
+              "provider": "mistral",
+              "model": "mistral-small-latest"
+            }
+          ]
+        },
+        "tailor:text": {
+          "chat": [
+            {
+              "provider": "nvidia",
+              "model": "qwen/qwen3.5-122b-a10b"
+            },
+            {
+              "provider": "nvidia",
+              "model": "meta/llama-4-maverick-17b-128e-instruct"
+            }
+          ]
+        }
+      },
+      "stageId": "tailor",
+      "consumerId": "text",
+      "capability": "chat"
+    },
+    "expected": [
+      {
+        "provider": "nvidia",
+        "model": "qwen/qwen3.5-122b-a10b"
+      },
+      {
+        "provider": "nvidia",
+        "model": "meta/llama-4-maverick-17b-128e-instruct"
+      },
+      {
+        "provider": "groq",
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+      },
+      {
+        "provider": "mistral",
+        "model": "mistral-medium-latest"
+      },
+      {
+        "provider": "mistral",
+        "model": "mistral-small-latest"
+      }
+    ]
+  },
+  {
+    "name": "evaluate_fit_L0_L1_L2_full_cascade",
+    "description": "Evaluate stage (prefix 'eval') and fit consumer with stage, consumer, and instance declarations plus a call-local instance declaration. Increasingly local bounded residuals produce the full fallback order.",
+    "input": {
+      "chains": {
+        "eval": {
+          "chat": [
+            {
+              "provider": "groq",
+              "model": "llama-3.3-70b"
+            },
+            {
+              "provider": "cerebras",
+              "model": "llama3.1-8b"
+            }
+          ]
+        },
+        "eval:fit": {
+          "chat": [
+            {
+              "provider": "google",
+              "model": "gemini-3-flash-preview"
+            }
+          ]
+        },
+        "eval:fit:job-42": {
+          "chat": [
+            {
+              "provider": "nvidia",
+              "model": "qwen/qwen3.5-122b-a10b"
+            }
+          ]
+        }
+      },
+      "stageId": "evaluate",
+      "consumerId": "fit",
+      "capability": "chat",
+      "instanceId": "job-42",
+      "l2Override": [
+        {
+          "provider": "anthropic",
+          "model": "claude-opus-4"
+        }
+      ]
+    },
+    "expected": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4"
+      },
+      {
+        "provider": "nvidia",
+        "model": "qwen/qwen3.5-122b-a10b"
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-flash-preview"
+      },
+      {
+        "provider": "groq",
+        "model": "llama-3.3-70b"
+      },
+      {
+        "provider": "cerebras",
+        "model": "llama3.1-8b"
+      }
+    ]
+  },
+  {
+    "name": "radar_scraping_scrape_capability",
+    "description": "RADAR stage, 'scraping' consumer, 'scrape' capability — the non-chat service path. The PIPELINE_STAGES radar seed resolves in declared order; reading the 'scrape' capability only.",
+    "input": {
+      "chains": {
+        "radar": {
+          "scrape": [
+            {
+              "provider": "tinyfish",
+              "model": "fetch"
+            },
+            {
+              "provider": "jina",
+              "model": "reader"
+            },
+            {
+              "provider": "tavily",
+              "model": "extract"
+            }
+          ]
+        }
+      },
+      "stageId": "radar",
+      "consumerId": "scraping",
+      "capability": "scrape"
+    },
+    "expected": [
+      {
+        "provider": "tinyfish",
+        "model": "fetch"
+      },
+      {
+        "provider": "jina",
+        "model": "reader"
+      },
+      {
+        "provider": "tavily",
+        "model": "extract"
+      }
+    ]
+  }
+]

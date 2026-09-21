@@ -1,0 +1,56 @@
+{
+  "name": "exact_subtree_compaction",
+  "layers": ["source", "task", "environment"],
+  "declarations": [
+    {
+      "kind": "prior",
+      "address": {},
+      "option": "browser",
+      "dimension": "failure",
+      "value": 0
+    },
+    {
+      "kind": "prior",
+      "address": {},
+      "option": "container",
+      "dimension": "failure",
+      "value": 1
+    }
+  ],
+  "observations": [
+    {
+      "address": {
+        "source": "portal",
+        "task": "old",
+        "environment": "browser"
+      },
+      "option": "browser",
+      "dimension": "failure",
+      "value": 8,
+      "variance": 0.2
+    }
+  ],
+  "maintenance": [
+    {
+      "kind": "compact",
+      "address": { "source": "portal", "task": "old" },
+      "option": "browser",
+      "dimension": "failure"
+    }
+  ],
+  "queries": [
+    {
+      "address": {
+        "source": "portal",
+        "task": "new",
+        "environment": "browser"
+      },
+      "temperature": 0,
+      "expected": ["container", "browser"],
+      "means": {
+        "browser": { "failure": 3.8095238095238093 },
+        "container": { "failure": 1 }
+      }
+    }
+  ]
+}

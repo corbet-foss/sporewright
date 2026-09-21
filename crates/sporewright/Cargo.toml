@@ -1,0 +1,27 @@
+[package]
+name = "sporewright"
+version = "0.3.0"
+edition = "2021"
+description = "Sparse addressed residual fields for resilient pull-based routing, hierarchical Gaussian learning, and budgeted curiosity; decision-equivalent with the TypeScript core."
+license = "LGPL-3.0-only WITH LGPL-3.0-linking-exception"
+# publish guard: stays false until the EA-"Spore" trademark clearance and an
+# explicit decision to release. The metadata here is publish-ready; remove this
+# line only after that gate clears.
+publish = false
+repository = "https://github.com/corbet-foss/sporewright"
+homepage = "https://github.com/corbet-foss/sporewright"
+documentation = "https://docs.rs/sporewright"
+readme = "../../README.md"
+keywords = ["router", "llm", "failover", "orchestrator", "routing"]
+categories = ["algorithms", "network-programming"]
+
+[dependencies]
+base64 = "0.22"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+# Integration tests (tests/*.rs) link only against the crate's public API plus its
+# dev-deps — NOT its normal deps — so a vector test that decodes a `{b64}` document
+# seed needs base64 declared here as well.
+base64 = "0.22"

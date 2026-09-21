@@ -1,0 +1,9 @@
+* @corbet-foss/maintainers
+
+/.github/ @corbet-foss/maintainers
+/Cargo.toml @corbet-foss/maintainers
+/Cargo.lock @corbet-foss/maintainers
+/LICENSE @corbet-foss/maintainers
+/crates/ @corbet-foss/maintainers
+/packages/ @corbet-foss/maintainers
+/tests/ @corbet-foss/maintainers

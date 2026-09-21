@@ -1,0 +1,92 @@
+{
+  "name": "02_saturated_pool_sinks_option",
+  "kind": "price",
+  "description": "One window of ticks drives acct_a far over its cap: usage 600 > cap 100 with α=0.1 ⇒ λ_a = 0.1·(600-100) = 50; acct_b idle (usage 0 < cap 100) ⇒ λ_b stays 0. After publishing prices, free_a scores 0 + 50·1 = 50 while free_b stays 0, so free_b leads. This is the shadow price shedding load off the saturated pool. Captured from the live tick→publish→resolve on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "financial",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "free_a",
+        "dim": "financial",
+        "v": 0.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "free_b",
+        "dim": "financial",
+        "v": 0.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "free_a",
+        "dim": "budget:acct_a",
+        "v": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "free_b",
+        "dim": "budget:acct_b",
+        "v": 1.0
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "budget": {
+    "step": 0.1,
+    "priceLevel": "global",
+    "pools": [
+      {
+        "pool": "acct_a",
+        "cap": 100.0
+      },
+      {
+        "pool": "acct_b",
+        "cap": 100.0
+      }
+    ],
+    "options": [
+      {
+        "option": "free_a",
+        "pool": "acct_a"
+      },
+      {
+        "option": "free_b",
+        "pool": "acct_b"
+      }
+    ]
+  },
+  "ticks": [
+    [
+      {
+        "pool": "acct_a",
+        "usage": 600.0
+      },
+      {
+        "pool": "acct_b",
+        "usage": 0.0
+      }
+    ]
+  ],
+  "cursor": {},
+  "expectedOrder": [
+    "free_b",
+    "free_a"
+  ],
+  "expectedLambda": {
+    "acct_a": 50.0,
+    "acct_b": 0.0
+  }
+}

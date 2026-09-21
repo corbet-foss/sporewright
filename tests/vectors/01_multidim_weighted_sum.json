@@ -1,0 +1,73 @@
+{
+  "name": "01_multidim_weighted_sum",
+  "description": "Two dimensions, shared weights; order is Sigma value*weight ascending. groq (0.4*1 + 0.2*2 = 0.8) and mistral (0.6*1 + 0.1*2 = 0.8) tie, broken by name; cerebras (0.3*1 + 0.5*2 = 1.3) last.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "cost",
+        "w": 2.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "cerebras",
+        "dim": "cost",
+        "v": 0.5
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "cerebras",
+        "dim": "latency",
+        "v": 0.3
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "groq",
+        "dim": "cost",
+        "v": 0.2
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "groq",
+        "dim": "latency",
+        "v": 0.4
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "mistral",
+        "dim": "cost",
+        "v": 0.1
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "mistral",
+        "dim": "latency",
+        "v": 0.6
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "cursor": {},
+  "expected": [
+    "groq",
+    "mistral",
+    "cerebras"
+  ]
+}

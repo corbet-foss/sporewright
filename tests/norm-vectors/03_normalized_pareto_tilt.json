@@ -1,0 +1,55 @@
+{
+  "name": "03_normalized_pareto_tilt",
+  "description": "DELIBERATE new golden. Same span scales (financial 0.01, latency 5.0) but crank financial's MRS weight to 3.0. a: 0.002/0.01*3 + 5/5*1 = 0.6+1.0 = 1.6 ; b: 0.01/0.01*3 + 0.5/5*1 = 3.0+0.1 = 3.1. The cheap option a now overtakes the fast option b — a Pareto-frontier move that is IMPOSSIBLE under the raw latency-dominated sum at any reasonable financial weight (raw, financial's ~0.01 magnitude can never beat latency's ~5). This is normalization turning the weights into honest marginal-rates-of-substitution. Captured from the live normalized resolve on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "financial",
+        "v": 0.002
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "a",
+        "dim": "latency",
+        "v": 5.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "b",
+        "dim": "financial",
+        "v": 0.01
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "b",
+        "dim": "latency",
+        "v": 0.5
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "norm": {
+    "writeLevel": "global",
+    "scales": {
+      "financial": 0.01,
+      "latency": 5.0
+    },
+    "weights": {
+      "financial": 3.0,
+      "latency": 1.0
+    }
+  },
+  "cursor": {},
+  "expected": [
+    "a",
+    "b"
+  ]
+}

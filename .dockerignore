@@ -1,0 +1,28 @@
+# Keep the Docker build context small and reproducible.
+# The build only needs the Cargo workspace sources.
+
+# Rust build artifacts
+target/
+
+# Node / TS artifacts
+node_modules/
+dist/
+*.tsbuildinfo
+
+# VCS and CI
+.git/
+.github/
+
+# Editor / OS cruft
+.DS_Store
+*.swp
+
+# Docker / deploy files (not needed inside the build context)
+**/Dockerfile
+.dockerignore
+**/docker-compose.yml
+**/deploy/
+
+# Docs and misc that don't affect the build
+*.md
+LICENSE

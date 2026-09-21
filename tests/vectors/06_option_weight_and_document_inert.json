@@ -1,0 +1,58 @@
+{
+  "name": "06_option_weight_and_document_inert",
+  "description": "A per-option weight (gas pedal) of 10 on groq pushes it behind cerebras (0.2*10 = 2.0 > 0.3*1); a pure-document option (doc:cv, bytes only) carries no scalar and is never a routing candidate.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "workspace",
+        "scope": {
+          "workspace": "acme"
+        },
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "workspace",
+        "scope": {
+          "workspace": "acme"
+        },
+        "option": "cerebras",
+        "dim": "latency",
+        "v": 0.3
+      },
+      {
+        "layer": "workspace",
+        "scope": {
+          "workspace": "acme"
+        },
+        "option": "doc:cv",
+        "dim": "state",
+        "v": {
+          "b64": "AQID"
+        }
+      },
+      {
+        "layer": "workspace",
+        "scope": {
+          "workspace": "acme"
+        },
+        "option": "groq",
+        "dim": "latency",
+        "v": 0.2,
+        "w": 10.0
+      }
+    ],
+    "layers": [
+      "global",
+      "workspace"
+    ]
+  },
+  "cursor": {
+    "workspace": "acme"
+  },
+  "expected": [
+    "cerebras",
+    "groq"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "01_median_even_and_odd",
+  "kind": "median",
+  "description": "CROSS-CORE GUARD for reduce_median / roll_up — the certified integrity up-path (MODEL.md §3). Previously only per-core unit literals pinned the rolled-up value (both hardcode 0.30000000000000004); this is the first SHARED vector both cores read. The feeder carries one option `groq` with TWO dims: `latency` has an EVEN count of finite reporters (0.2, 0.4 over devices A, B) so the median is the average of the two middle elements = (0.2+0.4)/2 = 0.30000000000000004 (the exact IEEE-754 bits, identical on both cores); `tokens` has an ODD count (0.2, 0.4, 0.9 over A, B, C) so the median is the single middle element 0.4. A fourth write injects a NON-FINITE latency on device C (Infinity) that the finite filter MUST drop — if a core stopped filtering, latency would become a 3-count median (0.4) instead of the even-count 0.30000000000000004, diverging the up-roll. The writes are in a scrambled instance order (B, C, A) so neither core's collection order matches a sorted scan; reduce_median sorts the collected values before indexing, so the result is order-independent and identical. Expected captured from the live reduce_median on both cores.",
+  "feeder": {
+    "levels": ["global", "device"],
+    "fromLevel": "device",
+    "toLevel": "global",
+    "toInst": "",
+    "writes": [
+      { "inst": "B", "option": "groq", "dim": "latency", "value": 0.4 },
+      { "inst": "C", "option": "groq", "dim": "latency", "value": "inf" },
+      { "inst": "A", "option": "groq", "dim": "latency", "value": 0.2 },
+      { "inst": "C", "option": "groq", "dim": "tokens", "value": 0.9 },
+      { "inst": "A", "option": "groq", "dim": "tokens", "value": 0.2 },
+      { "inst": "B", "option": "groq", "dim": "tokens", "value": 0.4 }
+    ]
+  },
+  "cursor": {},
+  "expected": [
+    { "option": "groq", "dim": "latency", "value": 0.30000000000000004 },
+    { "option": "groq", "dim": "tokens", "value": 0.4 }
+  ]
+}

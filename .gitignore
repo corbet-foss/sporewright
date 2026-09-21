@@ -1,0 +1,15 @@
+target/
+Cargo.lock
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+.claude/
+
+# Internal mission anchor — names downstream products + the absorption strategy; the
+# repo is slated public (gated on trademark clearance), so this stays local. The
+# durable copy lives in private memory; agents get the mission baked into their prompts.
+MISSION.md
+
+# Internal design log — names downstream products + infra; stays out of the public repo.
+DESIGN-LOG.md

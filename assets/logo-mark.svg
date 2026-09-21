@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="sporewright mark">
+  <title>sporewright</title>
+  <!--
+    The mark is the architecture: a hub (the orchestrator) with hyphal threads
+    radiating to rim nodes (devices), plus a few chords between rim nodes (P2P).
+    A spore-network / wheel-with-chords. Mono-friendly; two tokens only.
+  -->
+  <defs>
+    <style>
+      .ink   { stroke:#16161d; }
+      .accent{ stroke:#16a394; }
+      .node  { fill:#16161d; }
+      .hub   { fill:#16a394; }
+      .ring  { fill:#ffffff; stroke:#16a394; }
+    </style>
+  </defs>
+
+  <!-- hyphal threads (hub -> rim), gently curved, a couple forking -->
+  <g fill="none" stroke-width="2.2" stroke-linecap="round" class="ink">
+    <path d="M60 60 Q 58 38 60 18"/>
+    <path d="M60 60 Q 80 46 96.4 39"/>
+    <path d="M60 60 Q 80 74 96.4 81"/>
+    <path d="M60 60 Q 62 82 60 102"/>
+    <path d="M60 60 Q 40 74 23.6 81"/>
+    <path d="M60 60 Q 40 46 23.6 39"/>
+    <!-- forks: hyphae branch -->
+    <path d="M78.2 49.5 Q 86 40 92 44"/>
+    <path d="M41.8 70.5 Q 34 80 28 76"/>
+  </g>
+
+  <!-- chords between rim nodes (sparse P2P links) -->
+  <g fill="none" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="1 4" class="accent">
+    <path d="M96.4 39 Q 102 60 96.4 81"/>
+    <path d="M23.6 81 Q 42 100 60 102"/>
+    <path d="M60 18 Q 40 26 23.6 39"/>
+  </g>
+
+  <!-- rim nodes (devices) -->
+  <g stroke-width="2.2" class="ring">
+    <circle cx="60"   cy="18"  r="5.2"/>
+    <circle cx="96.4" cy="39"  r="5.2"/>
+    <circle cx="96.4" cy="81"  r="5.2"/>
+    <circle cx="60"   cy="102" r="5.2"/>
+    <circle cx="23.6" cy="81"  r="5.2"/>
+    <circle cx="23.6" cy="39"  r="5.2"/>
+  </g>
+
+  <!-- hub (the orchestrator) -->
+  <circle cx="60" cy="60" r="9.5" class="hub"/>
+  <circle cx="60" cy="60" r="3.4" fill="#ffffff"/>
+</svg>

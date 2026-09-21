@@ -1,0 +1,87 @@
+{
+  "name": "02_capability_gate_survivors_ordered_by_cost",
+  "description": "After capability gating, the SURVIVORS are still ordered by their judgement dims — proving the gate is purely additive and does not touch cost. A GPU embed job in region CH requires gpu:burst AND geo:CH. Four options with distinct financial costs. Only 'gpu-ch' (cheapest GPU+CH) and 'gpu-ch2' (pricier GPU+CH) offer both; 'gpu-us' is wrong geo, 'cpu-ch' has no GPU. Both must drop, and the two survivors must come back gpu-ch (0.2) before gpu-ch2 (0.5) on both cores.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "financial",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "gpu-ch",
+        "dim": "financial",
+        "v": 0.2
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "gpu-ch2",
+        "dim": "financial",
+        "v": 0.5
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "gpu-us",
+        "dim": "financial",
+        "v": 0.1
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "cpu-ch",
+        "dim": "financial",
+        "v": 0.05
+      }
+    ],
+    "layers": [
+      "global",
+      "source",
+      "job"
+    ]
+  },
+  "gate": {
+    "writerLevel": "global",
+    "level": "job",
+    "inst": "embed-7",
+    "options": [
+      "gpu-ch",
+      "gpu-ch2",
+      "gpu-us",
+      "cpu-ch"
+    ],
+    "required": [
+      "gpu:burst",
+      "geo:CH"
+    ],
+    "offers": {
+      "gpu-ch": [
+        "gpu:burst",
+        "geo:CH"
+      ],
+      "gpu-ch2": [
+        "gpu:burst",
+        "geo:CH"
+      ],
+      "gpu-us": [
+        "gpu:burst",
+        "geo:US"
+      ],
+      "cpu-ch": [
+        "geo:CH"
+      ]
+    }
+  },
+  "cursor": {
+    "job": "embed-7"
+  },
+  "expected": [
+    "gpu-ch",
+    "gpu-ch2"
+  ]
+}

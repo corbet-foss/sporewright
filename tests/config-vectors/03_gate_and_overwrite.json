@@ -1,0 +1,103 @@
+{
+  "config": {
+    "seeds": [
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "kind": "weight",
+        "value": 1.0
+      },
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "keep",
+        "dim": "latency",
+        "kind": "value",
+        "value": 9.0
+      },
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "keep",
+        "dim": "latency",
+        "kind": "value",
+        "value": 0.2
+      },
+      {
+        "floor": "global",
+        "layer": "global",
+        "scope": {},
+        "option": "drop",
+        "dim": "latency",
+        "kind": "value",
+        "value": 0.1
+      },
+      {
+        "floor": "job",
+        "layer": "job",
+        "scope": {
+          "job": "j1"
+        },
+        "option": "drop",
+        "dim": "priv:residential",
+        "kind": "value",
+        "value": "inf"
+      }
+    ],
+    "layers": [
+      "global",
+      "job"
+    ]
+  },
+  "cursor": {
+    "job": "j1"
+  },
+  "description": "A gate (a non-finite +inf value, no special kind) drops an option at a job slice; and a later seed at the same coordinate overwrites an earlier one (declared order is load-bearing). After both, resolve keeps only the surviving option.",
+  "expected": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "latency",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "drop",
+        "dim": "latency",
+        "v": 0.1
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "keep",
+        "dim": "latency",
+        "v": 0.2
+      },
+      {
+        "layer": "job",
+        "scope": {
+          "job": "j1"
+        },
+        "option": "drop",
+        "dim": "priv:residential",
+        "v": "inf"
+      }
+    ],
+    "layers": [
+      "global",
+      "job"
+    ]
+  },
+  "name": "03_gate_and_overwrite",
+  "resolve_expected": [
+    "keep"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "curiosity_reopens_unknown",
+  "layers": ["leaf"],
+  "declarations": [
+    { "kind": "prior", "address": {}, "option": "known", "dimension": "cost", "value": 0.0 },
+    { "kind": "prior", "address": {}, "option": "unknown", "dimension": "cost", "value": 1.0 }
+  ],
+  "observations": [
+    { "address": { "leaf": "x" }, "option": "known", "dimension": "cost", "value": 0.0, "variance": 0.01 }
+  ],
+  "queries": [
+    {
+      "address": { "leaf": "x" },
+      "temperature": 0.0,
+      "expected": ["known", "unknown"],
+      "means": { "known": { "cost": 0.0 }, "unknown": { "cost": 1.0 } }
+    },
+    {
+      "address": { "leaf": "x" },
+      "temperature": 2.0,
+      "expected": ["unknown", "known"],
+      "means": { "known": { "cost": 0.0 }, "unknown": { "cost": 1.0 } }
+    }
+  ]
+}

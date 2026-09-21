@@ -1,0 +1,18 @@
+{
+  "name": "additive_path",
+  "layers": ["b", "c"],
+  "declarations": [
+    { "kind": "prior", "address": {}, "option": "route", "dimension": "q1", "value": 1.0 },
+    { "kind": "prior", "address": { "b": "B1" }, "option": "route", "dimension": "q1", "value": 2.0 },
+    { "kind": "prior", "address": { "b": "B1", "c": "C11" }, "option": "route", "dimension": "q1", "value": 3.0 }
+  ],
+  "observations": [],
+  "queries": [
+    {
+      "address": { "b": "B1", "c": "C11" },
+      "temperature": 0.0,
+      "expected": ["route"],
+      "means": { "route": { "q1": 6.0 } }
+    }
+  ]
+}

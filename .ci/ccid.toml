@@ -1,0 +1,13 @@
+schema = 1
+project = "sporewright"
+# Preserve the library's existing unlocked dependency policy. Resolved dependency
+# versions must accompany evidence; this is not a frozen-lockfile claim.
+[checks.rust]
+kind = "commands"
+commands = [["cargo", "fmt", "--all", "--check"], ["cargo", "clippy", "--workspace", "--all-targets", "--", "-D", "warnings"], ["cargo", "test", "--workspace"]]
+[checks.typescript]
+kind = "commands"
+commands = [["bash", "-euc", "cd packages/sporewright; bun install --frozen-lockfile; bunx tsc --noEmit; bun test"]]
+[checks.fmt]
+kind = "cargo"
+actions = ["fmt"]

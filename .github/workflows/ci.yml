@@ -1,0 +1,89 @@
+name: CI
+
+# Routine checks run through Crow using .ci/ccid.toml (rust,typescript).
+# Keep the complete hosted job as an explicit fallback.
+on:
+  workflow_dispatch:
+
+jobs:
+  rust:
+    name: Rust
+    runs-on: ubuntu-latest
+    # Observed ~35s. 15 is the floor plus headroom for a cold cargo build as
+    # the workspace grows; a wedged step fails here instead of holding a
+    # runner for the account-wide 6h default.
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      # fmt, clippy and test are independent verifications of the same tree,
+      # so each one reports its own verdict instead of the first failure
+      # masking the rest. The job is still red if any of them fails.
+      - name: Format check
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        if: '!cancelled()'
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Test
+        if: '!cancelled()'
+        run: cargo test --workspace
+
+  typescript:
+    name: TypeScript (sporewright)
+    runs-on: ubuntu-latest
+    # Observed ~10s; bun install is the only network step.
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: packages/sporewright
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Type-check
+        if: '!cancelled()'
+        run: bunx tsc --noEmit
+
+      - name: Test
+        if: '!cancelled()'
+        run: bun test
+
+  typescript-router:
+    name: TypeScript (router)
+    runs-on: ubuntu-latest
+    # The LLM adopter has the heavier AI-SDK dependency tree.
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: packages/router
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Type-check
+        if: '!cancelled()'
+        run: bunx tsc --noEmit
+
+      - name: Test
+        if: '!cancelled()'
+        run: bun test

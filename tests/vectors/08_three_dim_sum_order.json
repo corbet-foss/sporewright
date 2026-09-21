@@ -1,0 +1,65 @@
+{
+  "name": "08_three_dim_sum_order",
+  "description": "Cross-core sum-order guard. Option x draws on THREE finite dims (budget:p1=0.1, budget:p2=0.2, financial=0.3, all weight 1). IEEE-754 addition is non-associative: summed in sorted-name order (budget:p1+budget:p2+financial) the score is the next f64 ABOVE 0.6 (0.6000000000000001); summed in the cells-array insertion order (financial,budget:p2,budget:p1) it is exactly 0.6. Competitor y sits at 0.6. So a core that adds in sorted-name order ranks [y,x] (x strictly larger), while a core that adds in insertion order ties x==y and name-breaks to [x,y] — the OPPOSITE queue. Both cores MUST iterate the dim axis in the same (sorted) order; this vector pins [y,x] and fails on either core if dim summation order ever diverges. No earlier vector exercises a 3+-finite-dim option.",
+  "tensor": {
+    "cells": [
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "budget:p1",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "budget:p2",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "",
+        "dim": "financial",
+        "w": 1.0
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "x",
+        "dim": "financial",
+        "v": 0.3
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "x",
+        "dim": "budget:p2",
+        "v": 0.2
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "x",
+        "dim": "budget:p1",
+        "v": 0.1
+      },
+      {
+        "layer": "global",
+        "scope": {},
+        "option": "y",
+        "dim": "financial",
+        "v": 0.6
+      }
+    ],
+    "layers": [
+      "global"
+    ]
+  },
+  "cursor": {},
+  "expected": [
+    "y",
+    "x"
+  ]
+}

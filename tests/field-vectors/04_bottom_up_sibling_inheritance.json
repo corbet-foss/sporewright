@@ -1,0 +1,24 @@
+{
+  "name": "bottom_up_sibling_inheritance",
+  "layers": ["source", "environment"],
+  "declarations": [
+    { "kind": "prior", "address": {}, "option": "browser", "dimension": "failure", "value": 0.0 }
+  ],
+  "observations": [
+    { "address": { "source": "a", "environment": "browser" }, "option": "browser", "dimension": "failure", "value": 1.0, "variance": 0.1 }
+  ],
+  "queries": [
+    {
+      "address": { "source": "a", "environment": "browser" },
+      "temperature": 0.0,
+      "expected": ["browser"],
+      "means": { "browser": { "failure": 0.9677419354838709 } }
+    },
+    {
+      "address": { "source": "b", "environment": "browser" },
+      "temperature": 0.0,
+      "expected": ["browser"],
+      "means": { "browser": { "failure": 0.3225806451612903 } }
+    }
+  ]
+}
